@@ -31,47 +31,55 @@ class Scanner {
     private void scanToken() {
         char c = advance();
         switch (c) {
-            case "(":
+            case '(':
                 addToken(LEFT_PAREN);
                 break;
-            case ")":
+            case ')':
                 addToken(RIGHT_PAREN);
                 break;
-            case "{":
+            case '{':
                 addToken(LEFT_BRACE);
                 break;
-            case "}":
+            case '}':
                 addToken(RIGHT_BRACE);
                 break;
-            case ",":
+            case ',':
                 addToken(COMMA);
                 break;
-            case ".":
+            case '.':
                 addToken(DOT);
                 break;
-            case "-":
+            case '-':
                 addToken(MINUS);
                 break;
-            case "+":
+            case '+':
                 addToken(PLUS);
                 break;
-            case ";":
+            case ';':
                 addToken(SEMICOLON);
                 break;
-            case "*":
+            case '*':
                 addToken(STAR);
                 break;
-            case "!":
+            case '!':
                 addToken(match("=") ? BANG_EQUAL : EQUAL);
                 break;
-            case "=":
+            case '=':
                 addToken(match("=") ? EQUAL_EQUAL : EQUAL);
                 break;
-            case "<":
+            case '<':
                 addToken(match("=") ? LESS_EQUAL : EQUAL);
                 break;
-            case ">":
+            case '>':
                 addToken(match("=") ? GREATER_EQUAL : EQUAL);
+                break;
+            case '/':
+                if (match('/')) {
+                    while (peek() != '\n' && !isAtEnd())
+                        advance();
+                } else {
+                    addToken(SLASH);
+                }
                 break;
             default:
                 Lox.error(line, "Unexpected character");
@@ -87,6 +95,12 @@ class Scanner {
 
         current++;
         return true;
+    }
+
+    private char peek() {
+        if (isAtEnd())
+            return '\0';
+        return source.charAt(current);
     }
 
     private boolean isAtEnd() {
