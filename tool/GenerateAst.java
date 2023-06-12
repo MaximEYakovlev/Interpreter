@@ -29,6 +29,12 @@ public class GenerateAst {
         writer.println();
         writer.println("abstract class " + baseName + " {");
 
+        for (String type : types) {
+            String className = type.split(".")[0].trim();
+            String fields = type.split(":")[1].trim();
+            defineType(writer, basename, className, fields);
+        }
+
         writer.println("}");
         writer.close();
     }
